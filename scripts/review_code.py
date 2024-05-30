@@ -9,7 +9,7 @@ github_token = os.getenv('GITHUB_TOKEN')
 pr_number = os.getenv('PR_NUMBER')  # Replace with your pull request number
 
 
-g = Github(github_token)
+g = Github('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')
 repo_name = os.getenv('GITHUB_REPOSITORY')
 repo = g.get_repo(repo_name)  # Get the repository object
 pr = repo.get_pull(int(pr_number))
