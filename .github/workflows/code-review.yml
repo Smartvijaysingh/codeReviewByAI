@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests PyGithub openai
+          pip install requests PyGithub openai==0.28
 
       - name: Run scripts/review_code.py
         env:
