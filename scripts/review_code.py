@@ -15,6 +15,10 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 # Create an instance of the OpenAI API client
 client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
+# Debug statements to verify environment variables
+print("API Base:", openai.api_base)
+print("API Key:", openai.api_key[:4] + "..." + openai.api_key[-4:])  # Print partial key for verification
+
 def get_diff():
     pr_number = os.getenv('PR_NUMBER')
     repo = os.getenv('GITHUB_REPOSITORY')
