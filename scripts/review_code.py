@@ -11,6 +11,9 @@ deployment_name = "gpt4o"  # Replace with your deployment name
 openai.api_base = api_base
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
+# Create an instance of the OpenAI API client
+client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
 def get_diff():
     pr_number = os.getenv('PR_NUMBER')
     repo = os.getenv('GITHUB_REPOSITORY')
@@ -28,10 +31,10 @@ def get_diff():
         diff += f"File: {filename}\n{patch}\n\n"
     return diff
 
-def get_completion(prompt, model="gpt-4"):
+def get_completion(prompt):
     messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(
-        engine=deployment_name,  # This is your model deployment name in Azure
+    response = client.chat.completions.create(
+        model=deployment_name,  # This is your model deployment name in Azure
         messages=messages,
         max_tokens=1500,
         temperature=0.5,
