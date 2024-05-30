@@ -6,7 +6,7 @@ from github import Github
 openai_api_key = 'd06eb40c833a49a4829f079d1ddbfc14'
 # openai_endpoint = 'https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/gpt4-turbo/completions?api-version=2023-07-01-preview'
 #openai_endpoint = 'https://api.openai.com/v1/engines/davinci-codex/completions'
-openai_endpoint = 'https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/Decision-GPT35/completions?api-version=2023-03-15-preview'
+openai_endpoint = 'https://sapiens-decision-openai.openai.azure.com/openai/deployments/Decision-GPT35/completions?api-version=2023-03-15-preview'
 
 github_token = os.getenv('GITHUB_TOKEN')
 pr_number = os.getenv('PR_NUMBER')
