@@ -38,7 +38,7 @@ def review_code(file_content):
             presence_penalty=0
         )
         return response.choices[0].message['content'].strip()
-    except openai.error.OpenAIError as e:
+    except Exception as e:
         print(f"OpenAI API error: {str(e)}")
         return "Error in processing the request."
 
