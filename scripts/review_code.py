@@ -28,23 +28,27 @@ def review_code(file_content):
         'api-key': openai_api_key,
     }
     data = {
-        "prompt": f"Please review the following code:\n\n{file_content}",
-        "max_tokens": 2000,
-        "temperature": 0.5,
-        "stop": ["\n\n"]
+        "messages": [
+            {"role": "system", "content": "You are an expert code reviewer."},
+            {"role": "user", "content": f"Please review the following code:\n\n{file_content}"}
+        ]
     }
     print("headers: ", headers)
     print("data: ", data)
     response = requests.post(openai_endpoint, headers=headers, json=data)
     response_json = response.json()
+    if response.status_code != 200:
+        print(f"Error: {response_json}")
+        return "Error in processing the request."
+    return response_json['choices'][0]['message']['content']
 
-    print("response_json: ", response_json)
-    choices = response_json.get('choices')
-
-    if len(choices) > 0:
-        return choices[0].get('text')
-    else:
-        return "No review comments generated."
+    # print("response_json: ", response_json)
+    # choices = response_json.get('choices')
+    #
+    # if len(choices) > 0:
+    #     return choices[0].get('text')
+    # else:
+    #     return "No review comments generated."
 
 for file in files:
     if file.filename.endswith(('.java')):  # Add other file types as needed
