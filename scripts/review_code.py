@@ -27,7 +27,12 @@ def review_code(file_content):
         "stop": ["\n\n"]
     }
     response = requests.post(openai_endpoint, headers=headers, json=data)
-    return response.json().get('choices')[0].get('text')
+    response_json = response.json()
+    choices = response_json.get('choices')
+    if choices is not None and len(choices) > 0:
+        return choices[0].get('text')
+    else:
+        return "No review comments generated."
 
 for file in files:
     if file.filename.endswith(('.py', '.js', '.java', '.go')):  # Add other file types as needed
