@@ -4,7 +4,7 @@ from github import Github
 
 # Set up your Azure OpenAI and GitHub credentials
 openai_api_key = 'd06eb40c833a49a4829f079d1ddbfc14'
-openai_endpoint = 'https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/gpt-4o/completions?api-version=2024-05-13'
+openai_endpoint = 'https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/gpt4o/completions?api-version=2024-05-01-preview'
 
 github_token = os.getenv('GITHUB_TOKEN')
 pr_number = os.getenv('PR_NUMBER')
