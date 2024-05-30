@@ -11,10 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
         uses: actions/checkout@v4.1.1
-        width:
+        with:
           fetch-depth: 0
 
+      - name: Get git diff
         uses: GrantBirki/git-diff-action@v2.4.0
         id: git_diff
         with:
@@ -26,12 +28,12 @@ jobs:
         run: |
           #get the code changes
           changed_code=$(cat ${{ steps.git_diff.outputs.raw_diff_path }})
-          
+
           echo "PR changes $changed_code"
-          
+
           # Escape newlines and double quotes in the changed code
           escaped_code=$(echo $"changed_files" | jq -s -R -r @json)
-          
+
           response=$(curl https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/gpt4-turbo/completions?api-version=2023-07-01-preview\
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
@@ -49,4 +51,3 @@ jobs:
             ]
            }")
           echo "Response: $response"
-
