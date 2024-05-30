@@ -1,54 +1,31 @@
-name: Gpt Code Review
+name: Azure OpenAI Code Review
 
 on:
   pull_request:
-permissions:
-  contents: read
-  issues: write
-  pull-requests: write
+    types: [opened, synchronize]
+
 jobs:
-  code-review:
+  review:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.1
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v2
 
-      - name: Get git diff
-        uses: GrantBirki/git-diff-action@v2.4.0
-        id: git_diff
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          raw_diff_file_output: diff.txt
-          file_output_only: "true"
+          python-version: '3.x'
 
-      - name: Perform code review
-        id: code_review_suggestions
+      - name: Install dependencies
         run: |
-          # Get the code changes
-          changed_code=$(cat ${{ steps.git_diff.outputs.raw_diff_path }})
+          pip install requests PyGithub openai
 
-          echo "PR changes $changed_code"
-
-          # Escape newlines and double quotes in the changed code
-          escaped_code=$(echo "$changed_code" | jq -s -R -r @json)
-
-          response=$(curl -s "https://sapiens-decision-openai.openai.azure.com/openai/deployments/Decision-GPT35/chat/completions?api-version=2024-02-01" \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
-          -d "{
-            \"model\": \"gpt-35-turbo\",
-            \"messages\": [
-              {
-                \"role\": \"system\",
-                \"content\": \"${{ vars.CODE_REVIEW_PROMPT }}\"
-              },
-              {
-                \"role\": \"user\",
-                \"content\": $escaped_code
-              }
-            ]
-           }")
-
-          echo "Response: $response"
+      - name: Run scripts/review_code.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python scripts/review_code.py
