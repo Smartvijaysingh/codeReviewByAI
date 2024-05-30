@@ -1,6 +1,6 @@
 import os
 import requests
-import openai
+from openai import OpenAI
 
 # Azure OpenAI configuration
 api_base = "https://sapiens-decision-openai.openai.azure.com/"
@@ -12,7 +12,7 @@ openai.api_base = api_base
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Create an instance of the OpenAI API client
-client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 def get_diff():
     pr_number = os.getenv('PR_NUMBER')
