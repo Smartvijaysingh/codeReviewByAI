@@ -21,6 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install openai
+          pip install requests
           pip install pyyaml
 
       - name: Run GPT-4 Code Review
