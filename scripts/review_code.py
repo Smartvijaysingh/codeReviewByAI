@@ -24,15 +24,17 @@ def review_code(diff):
 
     prompt = f"Review the following Java code changes and suggest improvements:\n\n{diff}"
 
-    response = openai.Completion.create(
-        engine="text-davinci-004",  # Use GPT-4 engine
+    response = openai.ChatCompletion.create(
         model="text-davinci-004",    # Use GPT-4 model
-        prompt=prompt,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=1500,
         temperature=0.5,
     )
 
-    return response.choices[0].text.strip()
+    return response['choices'][0]['message']['content'].strip()
 
 if __name__ == "__main__":
     diff = get_diff()
