@@ -11,6 +11,17 @@ public class Test {
                System.out.print(j);
            }
        }
-System.out.println("myName is vijay singh");
+System.out.println("myName is vijay singh ");
+    }
+public static int factorial(int n)
+    {
+        if(n==0)
+        {
+            return 1;
+        }
+        else
+        {
+            return n*factorial(n-1);
+        }
     }
 }
