@@ -3,7 +3,7 @@ import requests
 import openai
 
 # Azure OpenAI configuration
-api_base = "https://sapiens-decision-openai.openai.azure.com/"
+api_base = "https://usa-decision-azureai-openai.openai.azure.com/"
 api_version = "2024-05-13"
 deployment_name = "gpt4o"  # Replace with your deployment name
 
