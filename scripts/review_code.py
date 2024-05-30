@@ -6,7 +6,7 @@ from github import Github
 openai_api_key = 'd06eb40c833a49a4829f079d1ddbfc14'
 openai_endpoint = 'https://usa-decision-azureai-openai.openai.azure.com/'
 github_token = os.getenv('GITHUB_TOKEN')
-pr_number = 1  # Replace with your pull request number
+pr_number = os.getenv('PR_NUMBER')  # Replace with your pull request number
 
 # Initialize GitHub client
 g = Github(github_token)
