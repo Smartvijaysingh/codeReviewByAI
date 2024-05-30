@@ -2,26 +2,26 @@ package org.example;
 
 public class Test {
 
-    public static void main(String args[])
-    {
-       for(int i=1;i<=5;i++)
-       {
-           for(int j=1;j<=i;j++)
-           {
-               System.out.print(j);
-           }
-       }
-System.out.println("myName is vijay singh ");
+    private String password;
+
+    public PasswordManager(String password) {
+        this.password = password;
     }
-public static int factorial(int n)
-    {
-        if(n==0)
-        {
-            return 1;
+
+    public void savePasswordToFile(String fileName) {
+        try {
+            FileWriter fw = new FileWriter(fileName);
+            fw.write("Password: " + password);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error saving password to file: " + e.getMessage());
         }
-        else
-        {
-            return n*factorial(n-1);
-        }
+    }
+
+    public static void main(String[] args) {
+        String password = args[0];
+        PasswordManager pm = new PasswordManager(password);
+        pm.savePasswordToFile("password.txt");
+        System.out.println("Password saved to file.");
     }
 }
