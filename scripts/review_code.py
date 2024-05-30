@@ -13,6 +13,7 @@ g = Github(github_token)
 repo_name = os.getenv('GITHUB_REPOSITORY')
 repo = g.get_repo(repo_name)  # Get the repository object
 pr = repo.get_pull(int(pr_number))
+files = pr.get_files()
 
 def review_code(file_content):
     headers = {
