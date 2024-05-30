@@ -35,7 +35,10 @@ def review_code(file_content):
     }
     response = requests.post(openai_endpoint, headers=headers, json=data)
     response_json = response.json()
+
+    print("response_json: ", response_json)
     choices = response_json.get('choices')
+
     if len(choices) > 0:
         return choices[0].get('text')
     else:
