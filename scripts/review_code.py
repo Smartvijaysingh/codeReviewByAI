@@ -33,6 +33,8 @@ def review_code(file_content):
         "temperature": 0.5,
         "stop": ["\n\n"]
     }
+    print("headers: ", headers)
+    print("data: ", data)
     response = requests.post(openai_endpoint, headers=headers, json=data)
     response_json = response.json()
 
