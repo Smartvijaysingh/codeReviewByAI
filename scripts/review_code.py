@@ -1,8 +1,15 @@
 import os
 import requests
-from openai import OpenAI
+import openai
 
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+# Azure OpenAI configuration
+api_base = "https://sapiens-decision-openai.openai.azure.com/"
+api_version = "2024-05-13"
+deployment_name = "gpt4o"  # Replace with your deployment name
+
+# Set the Azure OpenAI endpoint and API key
+openai.api_base = api_base
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 def get_diff():
     pr_number = os.getenv('PR_NUMBER')
@@ -21,22 +28,23 @@ def get_diff():
         diff += f"File: {filename}\n{patch}\n\n"
     return diff
 
-def get_completion(prompt, client_instance, model="gpt-4"):
+def get_completion(prompt, model="gpt-4"):
     messages = [{"role": "user", "content": prompt}]
-    response = client_instance.chat.completions.create(
-        model=model,
+    response = openai.ChatCompletion.create(
+        engine=deployment_name,  # This is your model deployment name in Azure
         messages=messages,
         max_tokens=1500,
         temperature=0.5,
+        api_version=api_version  # This specifies the API version to use
     )
     return response['choices'][0]['message']['content']
 
-def review_code(diff, client_instance):
+def review_code(diff):
     prompt = f"Review the following Java code changes and suggest improvements:\n\n{diff}"
-    return get_completion(prompt, client_instance)
+    return get_completion(prompt)
 
 if __name__ == "__main__":
     diff = get_diff()
-    review = review_code(diff, client)
+    review = review_code(diff)
     print("### Code Review by GPT-4 ###")
     print(review)
