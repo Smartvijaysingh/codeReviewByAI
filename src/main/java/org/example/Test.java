@@ -124,5 +124,9 @@ public class Test extends HttpServlet {
                 response.getWriter().println("File not found: " + filePath);
             }
 
+            for(int i=0;i<10;i++){
+                System.out.println("Hello World");
+            }
+
     }
 
