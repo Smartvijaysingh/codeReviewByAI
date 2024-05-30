@@ -29,9 +29,7 @@ def review_code(diff):
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
-        ],
-        max_tokens=1500,
-        temperature=0.5,
+        ]
     )
 
     return response['choices'][0]['message']['content'].strip()
