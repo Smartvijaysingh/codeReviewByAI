@@ -5,11 +5,11 @@ from github import Github
 # Set up your Azure OpenAI and GitHub credentials
 openai_api_key = 'd06eb40c833a49a4829f079d1ddbfc14'
 openai_endpoint = 'https://usa-decision-azureai-openai.openai.azure.com/'
-# github_token = os.getenv('GITHUB_TOKEN')
+github_token = os.getenv('GITHUB_TOKEN')
 pr_number = os.getenv('PR_NUMBER')  # Replace with your pull request number
 
 
-g = Github('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')
+g = Github(github_token)
 repo_name = os.getenv('GITHUB_REPOSITORY')
 repo = g.get_repo(repo_name)  # Get the repository object
 pr = repo.get_pull(int(pr_number))
