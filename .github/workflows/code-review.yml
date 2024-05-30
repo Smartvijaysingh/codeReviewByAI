@@ -34,7 +34,7 @@ jobs:
           # Escape newlines and double quotes in the changed code
           escaped_code=$(echo $"changed_files" | jq -s -R -r @json)
 
-          response=$(curl "https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/gpt4-turbo/completions?api-version=2023-07-01-preview" \
+          response=$(curl "https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/gpt4-turbo/completions" \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
           -d "{
