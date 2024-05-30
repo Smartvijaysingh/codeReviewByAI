@@ -55,7 +55,7 @@ public class Test extends HttpServlet {
 
         // 5. Insecure Deserialization
         String serializedData = request.getParameter("data");
-        try {
+        try
             ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(serializedData));
             ObjectInputStream ois = new ObjectInputStream(bis);
             Object obj = ois.readObject();
@@ -123,6 +123,6 @@ public class Test extends HttpServlet {
             } else {
                 response.getWriter().println("File not found: " + filePath);
             }
-        }
+
     }
-}
+

@@ -36,7 +36,7 @@ def review_code(file_content):
     response = requests.post(openai_endpoint, headers=headers, json=data)
     response_json = response.json()
     choices = response_json.get('choices')
-    if choices is not None and len(choices) > 0:
+    if len(choices) > 0:
         return choices[0].get('text')
     else:
         return "No review comments generated."
