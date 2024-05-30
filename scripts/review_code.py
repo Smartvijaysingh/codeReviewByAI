@@ -37,8 +37,7 @@ def get_completion(prompt):
         model=deployment_name,  # This is your model deployment name in Azure
         messages=messages,
         max_tokens=1500,
-        temperature=0.5,
-        api_version=api_version  # This specifies the API version to use
+        temperature=0.5 # This specifies the API version to use
     )
     return response['choices'][0]['message']['content']
 
