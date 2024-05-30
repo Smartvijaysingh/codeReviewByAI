@@ -9,6 +9,7 @@ openai.api_version = "2023-09-15-preview"
 openai.api_key = "42f7029b82624b29acae4e096991d80d"
 
 github_token = os.getenv('GITHUB_TOKEN')
+print(f"github_token: {github_token}")
 pr_number = os.getenv('PR_NUMBER')
 
 print(f"PR_NUMBER: {pr_number}")
