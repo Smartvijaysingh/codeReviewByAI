@@ -8,11 +8,11 @@ openai_endpoint = 'https://usa-decision-azureai-openai.openai.azure.com/'
 github_token = os.getenv('GITHUB_TOKEN')
 pr_number = os.getenv('PR_NUMBER')  # Replace with your pull request number
 
-# Initialize GitHub client
+
 g = Github(github_token)
-repo = os.getenv('GITHUB_REPOSITORY')
-pr = repo.get_pull(pr_number)
-files = pr.get_files()
+repo_name = os.getenv('GITHUB_REPOSITORY')
+repo = g.get_repo(repo_name)  # Get the repository object
+pr = repo.get_pull(int(pr_number))
 
 def review_code(file_content):
     headers = {
