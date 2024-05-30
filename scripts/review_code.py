@@ -35,15 +35,14 @@ def review_code(file_content):
             {"role": "user", "content": f"Please review the following code:\n\n{file_content}"}
         ]
     }
-    print("headers: ", headers)
-    print("data: ", data)
     response = requests.post(openai_endpoint, headers=headers, json=data)
-    print(f"response: ",response)
-    response_json = response.json()
+    print(f"response: {response}")
     if response.status_code != 200:
-        print(f"Error: {response_json}")
+        print(f"Error: {response.content}")
         return "Error in processing the request."
+    response_json = response.json()
     return response_json['choices'][0]['message']['content']
+
 
     # print("response_json: ", response_json)
     # choices = response_json.get('choices')
