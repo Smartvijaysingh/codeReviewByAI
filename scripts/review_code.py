@@ -38,6 +38,7 @@ def review_code(file_content):
     print("headers: ", headers)
     print("data: ", data)
     response = requests.post(openai_endpoint, headers=headers, json=data)
+    print(f"response: ",response)
     response_json = response.json()
     if response.status_code != 200:
         print(f"Error: {response_json}")
