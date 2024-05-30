@@ -47,7 +47,7 @@ def review_code(file_content):
         return "No review comments generated."
 
 for file in files:
-    if file.filename.endswith(('.py', '.js', '.java', '.go')):  # Add other file types as needed
+    if file.filename.endswith(('.java')):  # Add other file types as needed
         review_comments = review_code(file.patch)
         pr.create_issue_comment(f"**Review for {file.filename}:**\n\n{review_comments}")
 
