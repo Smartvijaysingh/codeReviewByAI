@@ -26,15 +26,15 @@ jobs:
       - name: Perform code review
         id: code_review_suggestions
         run: |
-          #get the code changes
+          # Get the code changes
           changed_code=$(cat ${{ steps.git_diff.outputs.raw_diff_path }})
 
           echo "PR changes $changed_code"
 
           # Escape newlines and double quotes in the changed code
-          escaped_code=$(echo $"changed_files" | jq -s -R -r @json)
+          escaped_code=$(echo "$changed_code" | jq -s -R -r @json)
 
-          response=$(curl "https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/gpt4-turbo/completions?api-version=2023-07-01-preview" \
+          response=$(curl -s "https://usa-decision-azureai-openai.openai.azure.com/openai/deployments/gpt4-turbo/completions?api-version=2023-07-01-preview" \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
           -d "{
@@ -42,7 +42,7 @@ jobs:
             \"messages\": [
               {
                 \"role\": \"system\",
-                \"content\": \"${{vars.CODE_REVIEW_PROMPT}}
+                \"content\": \"${{ vars.CODE_REVIEW_PROMPT }}\"
               },
               {
                 \"role\": \"user\",
@@ -50,4 +50,5 @@ jobs:
               }
             ]
            }")
+
           echo "Response: $response"
