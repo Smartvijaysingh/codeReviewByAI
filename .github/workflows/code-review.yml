@@ -1,12 +1,11 @@
-name: Code Review with GPT-4
+name: Azure OpenAI Code Review
 
 on:
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize]
 
 jobs:
-  code_review:
+  review:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,14 +19,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade openai
-          pip install requests
+          pip install requests PyGithub 
           pip install pyyaml
 
-      - name: Run GPT-4 Code Review
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.number }}
-        run: |
-          python scripts/review_code.py
+      - name: Run scripts/review_code.py
+        env

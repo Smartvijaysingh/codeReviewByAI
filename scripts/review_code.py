@@ -1,52 +1,36 @@
-import os
 import requests
-import openai
+import os
+from github import Github
 
-# Azure OpenAI configuration
-api_base = "https://sapiens-decision-openai.openai.azure.com/"
-api_version = "2024-05-13"
-deployment_name = "gpt4o"  # Replace with your deployment name
+# Set up your Azure OpenAI and GitHub credentials
+openai_api_key = 'd06eb40c833a49a4829f079d1ddbfc14'
+openai_endpoint = 'https://usa-decision-azureai-openai.openai.azure.com/'
+github_token = os.getenv('GITHUB_TOKEN')
+pr_number = os.getenv('PR_NUMBER')  # Replace with your pull request number
 
-# Set the Azure OpenAI endpoint and API key
-openai.api_base = api_base
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# Initialize GitHub client
+g = Github(github_token)
+repo = os.getenv('GITHUB_REPOSITORY')
+pr = repo.get_pull(pr_number)
+files = pr.get_files()
 
-# Create an instance of the OpenAI API client
-client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+def review_code(file_content):
+    headers = {
+        'Content-Type': 'application/json',
+        'api-key': openai_api_key,
+    }
+    data = {
+        "prompt": f"Please review the following code:\n\n{file_content}",
+        "max_tokens": 2000,
+        "temperature": 0.5,
+        "stop": ["\n\n"]
+    }
+    response = requests.post(openai_endpoint, headers=headers, json=data)
+    return response.json().get('choices')[0].get('text')
 
-def get_diff():
-    pr_number = os.getenv('PR_NUMBER')
-    repo = os.getenv('GITHUB_REPOSITORY')
-    token = os.getenv('GITHUB_TOKEN')
+for file in files:
+    if file.filename.endswith(('.py', '.js', '.java', '.go')):  # Add other file types as needed
+        review_comments = review_code(file.patch)
+        pr.create_issue_comment(f"**Review for {file.filename}:**\n\n{review_comments}")
 
-    url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/files"
-    headers = {'Authorization': f'token {token}'}
-    response = requests.get(url, headers=headers)
-    files = response.json()
-
-    diff = ""
-    for file in files:
-        filename = file['filename']
-        patch = file.get('patch', '')
-        diff += f"File: {filename}\n{patch}\n\n"
-    return diff
-
-def get_completion(prompt):
-    messages = [{"role": "user", "content": prompt}]
-    response = client.chat.completions.create(
-        model=deployment_name,  # This is your model deployment name in Azure
-        messages=messages,
-        max_tokens=1500,
-        temperature=0.5 # This specifies the API version to use
-    )
-    return response['choices'][0]['message']['content']
-
-def review_code(diff):
-    prompt = f"Review the following Java code changes and suggest improvements:\n\n{diff}"
-    return get_completion(prompt)
-
-if __name__ == "__main__":
-    diff = get_diff()
-    review = review_code(diff)
-    print("### Code Review by GPT-4 ###")
-    print(review)
+print("Code review comments have been posted to the pull request.")
