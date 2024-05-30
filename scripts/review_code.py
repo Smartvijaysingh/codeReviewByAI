@@ -25,6 +25,7 @@ pr = repo.get_pull(int(pr_number))
 files = pr.get_files()
 
 def review_code(file_content):
+    file_content = str(file_content)
     headers = {
         'Content-Type': 'application/json',
         'api-key': openai_api_key,
