@@ -34,11 +34,11 @@ jobs:
           # Escape newlines and double quotes in the changed code
           escaped_code=$(echo "$changed_code" | jq -s -R -r @json)
 
-          response=$(curl -s "https://eastus2.api.cognitive.microsoft.com/openai/2023-07-01-preview/usa-decision-azureai-openai" \
+          response=$(curl -s "https://sapiens-decision-openai.openai.azure.com/openai/deployments/Decision-GPT35/completions?api-version=2023-03-15-preview" \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
           -d "{
-            \"model\": \"gpt-4\",
+            \"model\": \"gpt-35-turbo\",
             \"messages\": [
               {
                 \"role\": \"system\",
