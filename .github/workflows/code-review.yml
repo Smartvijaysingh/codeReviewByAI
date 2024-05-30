@@ -27,4 +27,4 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          python review_code.py
+          python scripts/review_code.py
