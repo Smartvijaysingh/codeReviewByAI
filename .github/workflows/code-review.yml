@@ -34,7 +34,7 @@ jobs:
           # Escape newlines and double quotes in the changed code
           escaped_code=$(echo "$changed_code" | jq -s -R -r @json)
 
-          response=$(curl -s "https://eastus2.api.cognitive.microsoft.com/" \
+          response=$(curl -s "https://eastus2.api.cognitive.microsoft.com/openai/deployments/gpt4-turbo-2024-04-09/completions" \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
           -d "{
