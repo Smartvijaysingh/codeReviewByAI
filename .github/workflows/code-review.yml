@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install openai
+          pip install --upgrade openai
           pip install requests
           pip install pyyaml
 

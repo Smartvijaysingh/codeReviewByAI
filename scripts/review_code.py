@@ -22,19 +22,17 @@ def get_diff():
 def review_code(diff):
     openai.api_key = os.getenv('OPENAI_API_KEY')
 
-    messages = [
-        {"role": "system", "content": "You are a code review assistant."},
-        {"role": "user", "content": f"Review the following Java code changes and suggest improvements:\n\n{diff}"}
-    ]
+    prompt = f"Review the following Java code changes and suggest improvements:\n\n{diff}"
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=messages,
+    response = openai.Completion.create(
+        engine="text-davinci-004",  # Use GPT-4 engine
+        model="text-davinci-004",    # Use GPT-4 model
+        prompt=prompt,
         max_tokens=1500,
         temperature=0.5,
     )
 
-    return response.choices[0].message['content'].strip()
+    return response.choices[0].text.strip()
 
 if __name__ == "__main__":
     diff = get_diff()
