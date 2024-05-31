@@ -13,7 +13,7 @@ pr_number = os.getenv('PR_NUMBER')
 g = Github(github_token)
 repo_name = os.getenv('GITHUB_REPOSITORY')
 repo = g.get_repo(repo_name)
-pr = repo.get_pull(pr_number)
+pr = repo.get_pull(int(pr_number))
 files = pr.get_files()
 
 def review_code(file_content):
