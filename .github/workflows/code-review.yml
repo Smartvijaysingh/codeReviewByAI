@@ -1,12 +1,11 @@
-name: Code Review with GPT-4
+name: Code Review
 
 on:
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize]
 
 jobs:
-  code_review:
+  review:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,11 +19,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install openai
-          pip install pyyaml  # if you need to parse YAML files
+          pip install requests PyGithub openai==0.28
 
-      - name: Run GPT-4 Code Review
+      - name: Run review_code
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          python review_code.py
+          python scripts/review_code.py

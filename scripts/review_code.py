@@ -1,29 +1,44 @@
 import os
 import openai
+from github import Github
 
-# Function to get diff from the pull request
-def get_diff():
-    # This is a simplified placeholder. You might need to use GitHub API or CLI to get actual diff.
-    diff = os.popen('git diff HEAD~1 HEAD').read()
-    return diff
+openai.api_type = "azure"
+openai.api_base = "https://sapiens-decision-openai.openai.azure.com/"
+openai.api_version = "2023-09-15-preview"
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
-# Function to review code with GPT-4
-def review_code(diff):
-    openai.api_key = os.getenv('OPENAI_API_KEY')
+github_token = os.getenv('GITHUB_TOKEN')
+pr_number = os.getenv('PR_NUMBER')
 
-    prompt = f"Review the following Java code changes and suggest improvements:\n\n{diff}"
+g = Github(github_token)
+repo_name = os.getenv('GITHUB_REPOSITORY')
+repo = g.get_repo(repo_name)
+pr = repo.get_pull(int(pr_number))
+files = pr.get_files()
 
-    response = openai.Completion.create(
-        engine="text-davinci-003",  # Assuming GPT-4 is under the 'text-davinci-003' engine
-        prompt=prompt,
-        max_tokens=1500,
-        temperature=0.5,
-    )
+def review_code(file_content):
+    prompt = f"Review the following Java code changes and suggest improvements with code if code changes requires and write junit test case:\n\n{file_content}"
+    try:
+        response = openai.ChatCompletion.create(
+            engine="Decision-GPT35",
+            messages=[
+                {"role": "system", "content": "You are an expert code reviewer."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.5,
+            max_tokens=4096,
+            top_p=0.5,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        return response.choices[0].message['content'].strip()
+    except Exception as e:
+        print(f"OpenAI API error: {str(e)}")
+        return "Error in processing the request."
 
-    return response.choices[0].text.strip()
+for file in files:
+    if file.filename.endswith('.java'):  # Add other file types as needed
+        review_comments = review_code(file.patch)
+        pr.create_issue_comment(f"**Review for {file.filename}:**\n\n{review_comments}")
 
-if __name__ == "__main__":
-    diff = get_diff()
-    review = review_code(diff)
-    print("### Code Review by GPT-4 ###")
-    print(review)
+print("Code review comments have been posted to the pull request.")
