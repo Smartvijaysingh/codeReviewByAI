@@ -5,7 +5,7 @@ from github import Github
 openai.api_type = "azure"
 openai.api_base = "https://sapiens-decision-openai.openai.azure.com/"
 openai.api_version = "2023-09-15-preview"
-openai.api_key = os.getenv('OPENAI_API')
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 github_token = os.getenv('GITHUB_TOKEN')
 pr_number = os.getenv('PR_NUMBER')
