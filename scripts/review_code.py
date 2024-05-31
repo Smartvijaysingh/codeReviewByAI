@@ -17,7 +17,7 @@ pr = repo.get_pull(int(pr_number))
 files = pr.get_files()
 
 def review_code(file_content):
-    prompt = f"Review the following Java code changes and suggest improvements with code if code changes requires:\n\n{file_content}"
+    prompt = f"Review the following Java code changes and suggest improvements with code if code changes requires and write junit test case:\n\n{file_content}"
     try:
         response = openai.ChatCompletion.create(
             engine="Decision-GPT35",
