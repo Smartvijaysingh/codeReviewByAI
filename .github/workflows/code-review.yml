@@ -1,4 +1,4 @@
-name: Azure OpenAI Code Review
+name: Code Review
 
 on:
   pull_request:
@@ -21,9 +21,9 @@ jobs:
         run: |
           pip install requests PyGithub openai==0.28
 
-      - name: Run scripts/review_code.py
+      - name: Run review_code
         env:
-          OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GITHUB_REPOSITORY: ${{ github.repository }}

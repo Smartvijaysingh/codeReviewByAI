@@ -2,29 +2,22 @@ import os
 import openai
 from github import Github
 
-# Set up your Azure OpenAI and GitHub credentials
 openai.api_type = "azure"
 openai.api_base = "https://sapiens-decision-openai.openai.azure.com/"
 openai.api_version = "2023-09-15-preview"
-openai.api_key = "42f7029b82624b29acae4e096991d80d"
+openai.api_key = os.getenv('OPENAI_API')
 
 github_token = os.getenv('GITHUB_TOKEN')
-print(f"github_token: {github_token}")
 pr_number = os.getenv('PR_NUMBER')
 
-print(f"PR_NUMBER: {pr_number}")
-print(f"GITHUB_REPOSITORY: {os.getenv('GITHUB_REPOSITORY')}")
-print(f"GITHUB_TOKEN: {github_token}")
-
-# Initialize GitHub client
 g = Github(github_token)
 repo_name = os.getenv('GITHUB_REPOSITORY')
 repo = g.get_repo(repo_name)
-pr = repo.get_pull(int(pr_number))
+pr = repo.get_pull(pr_number)
 files = pr.get_files()
 
 def review_code(file_content):
-    prompt = f"Review the following Java code changes and suggest improvements:\n\n{file_content}"
+    prompt = f"Review the following Java code changes and suggest improvements with code if code changes requires:\n\n{file_content}"
     try:
         response = openai.ChatCompletion.create(
             engine="Decision-GPT35",
