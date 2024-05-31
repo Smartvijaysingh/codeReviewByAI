@@ -11,7 +11,6 @@ public class Test extends HttpServlet {
         String user = request.getParameter("user");
         String password = request.getParameter("password");
 
-        // 1. SQL Injection Vulnerability
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -39,21 +38,17 @@ public class Test extends HttpServlet {
             }
         }
 
-        // 2. Cross-Site Scripting (XSS) Vulnerability
         String searchQuery = request.getParameter("search");
         response.getWriter().println("Search results for: " + searchQuery);
 
-        // 3. Insecure Cookie Handling
         Cookie cookie = new Cookie("sessionId", "12345");
         response.addCookie(cookie);
 
-        // 4. Hardcoded Credentials
         String hardcodedPassword = "secret";
         if (password.equals(hardcodedPassword)) {
             response.getWriter().println("Hardcoded password match!");
         }
 
-        // 5. Insecure Deserialization
         String serializedData = request.getParameter("data");
         try
             ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(serializedData));
@@ -64,13 +59,10 @@ public class Test extends HttpServlet {
             e.printStackTrace();
         }
 
-        // 6. Insufficient Logging and Monitoring
-        // No logging of failed login attempts or other security-relevant events
 
-        // 7. Sensitive Data Exposure
         response.getWriter().println("User password: " + password);
 
-        // 8. Unrestricted File Uploads
+
         if (request.getContentType().startsWith("multipart/form-data")) {
             Part filePart = request.getPart("file");
             String fileName = filePart.getSubmittedFileName();
@@ -88,7 +80,7 @@ public class Test extends HttpServlet {
             }
         }
 
-        // 9. Improper Error Handling
+
         try {
             // Some code that may throw an exception
             throw new Exception("Test exception");
@@ -96,15 +88,13 @@ public class Test extends HttpServlet {
             response.getWriter().println("An error occurred: " + e.getMessage());
         }
 
-        // 10. Missing Authentication and Authorization
+
         String adminAction = request.getParameter("adminAction");
         if (adminAction != null) {
-            // Perform some admin action without checking if the user is an admin
             response.getWriter().println("Admin action performed: " + adminAction);
         }
 
-        // 11. Insecure Communication
-        // Sending sensitive information over HTTP instead of HTTPS
+
         response.getWriter().println("Sending sensitive data over insecure HTTP: " + password);
 
         // 12. Path Traversal
@@ -122,10 +112,6 @@ public class Test extends HttpServlet {
                 }
             } else {
                 response.getWriter().println("File not found: " + filePath);
-            }
-
-            for(int i=0;i<10;i++){
-                System.out.println("Hello World");
             }
 
     }
