@@ -26,7 +26,7 @@ def review_code(file_content):
                 {"role": "user", "content": prompt}
             ],
             temperature=0.5,
-            max_tokens=1500,
+            max_tokens=4096,
             top_p=0.5,
             frequency_penalty=0,
             presence_penalty=0
